@@ -1,0 +1,39 @@
+body {
+    padding: 10px;
+    font-family: "Arial", sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+}
+h1 {
+    font-size: x-large;
+    margin-left: 20px;
+}
+.menu {
+    width: 60%;
+    padding: 10px 15px;
+    margin: 5px;
+    list-style: none;
+    background-color: #5eb5e0;
+    border: 2px solid #3c0396;
+    border-radius: 10px;
+}
+
+.menu li {
+    display: inline;
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+a {
+    color: darkblue;
+    text-decoration: none;
+}
+
+button {
+    margin-left: 20px;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #b4a3f7;
+    border-radius: 10px;
+    border: 2px solid #3c0396;
+}
