@@ -29,11 +29,12 @@ a {
     text-decoration: none;
 }
 
-button {
+.button {
     margin-left: 20px;
     margin-top: 20px;
     padding: 10px;
     background-color: #b4a3f7;
     border-radius: 10px;
     border: 2px solid #3c0396;
+    cursor: pointer;
 }
