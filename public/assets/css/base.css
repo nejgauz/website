@@ -13,7 +13,6 @@ h1 {
     padding: 10px 15px;
     margin: 5px;
     list-style: none;
-    background-color: #5eb5e0;
     border: 2px solid #3c0396;
     border-radius: 10px;
 }
@@ -25,7 +24,7 @@ h1 {
 }
 
 a {
-    color: darkblue;
+    color: #7c38b0;
     text-decoration: none;
 }
 
@@ -37,4 +36,25 @@ a {
     border-radius: 10px;
     border: 2px solid #3c0396;
     cursor: pointer;
+}
+
+form label {
+    vertical-align: middle;
+}
+
+input {
+    margin: 10px;
+    padding: 10px;
+    border: 2px solid #3c0396;
+    border-radius: 10px;
+    outline: none;
+}
+
+form {
+    margin-left: 20px;
+}
+
+.cancel {
+    margin-left: 40px;
+    background-color: #2392fa;
 }
