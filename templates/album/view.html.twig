@@ -1,26 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Список фотографий</h1>
+    <h1>{{ album.title }}</h1>
     <ul>
-        <ul class="menu">
-            <li>картинка</li>
-            <li>название</li>
-            <li>дата создания</li>
-            <li><a href="#">удалить фотографию</a></li>
-        </ul>
-        <ul class="menu">
-            <li>картинка</li>
-            <li>название</li>
-            <li>дата создания</li>
-            <li><a href="#">удалить фотографию</a></li>
-        </ul>
-        <ul class="menu">
-            <li>картинка</li>
-            <li>название</li>
-            <li>дата создания</li>
-            <li><a href="#">удалить фотографию</a></li>
-        </ul>
+        {% for photo in album.photos %}
+            <ul class="menu">
+                <li>{{ photo.image_path }}</li>
+                <li>{{ photo.title }}</li>
+                <li>Загружено: {{ dt_create }}</li>
+                <li><a href="#">удалить фотографию</a></li>
+            </ul>
+        {% endfor %}
     </ul>
     <button class="button">Добавить фото</button>
 {% endblock %}
