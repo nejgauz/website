@@ -17,12 +17,16 @@ class AlbumsController extends AbstractController
 {
     /**
      * @Route("/albums", name="albums_list")
-     * * @return Response
+     * @return Response
      */
     public function showAlbums()
     {
+        $albums = $this->getDoctrine()
+            ->getRepository(Album::class)
+            ->findAll();
         return $this->render('albums.html.twig', [
-            'title' => 'Список альбомов'
+            'title' => 'Список альбомов',
+            'albums' => $albums
         ]);
     }
 
