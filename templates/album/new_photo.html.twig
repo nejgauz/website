@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Добавление фотографии в альбом "{{ album.title }}":</h1>
+    {{ form_start(form) }}
+
+    {{ form_row(form.image_path, {'label': 'Прикрепите файл'}) }}
+
+    {{ form_row(form.title, {'label': 'Название фотографии'}) }}
+
+    {{ form_row(form.save, {'attr': {'class': 'button'}}) }}
+
+    {{ form_end(form) }}
+    <button class="button cancel">Отмена</button>
+{% endblock %}

@@ -74,6 +74,19 @@ class Album
         return $this;
     }
 
+    public function getDtChange(): ?\DateTimeInterface
+    {
+        return $this->dt_change;
+    }
+
+    public function setDtChange(\DateTimeInterface $dt_change): self
+    {
+        $this->dt_change = $dt_change;
+
+        return $this;
+    }
+
+
     public function getTitle(): ?string
     {
         return $this->title;
