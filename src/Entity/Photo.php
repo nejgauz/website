@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PhotoRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -22,7 +23,7 @@ class Photo
      * @ORM\ManyToOne(targetEntity=Album::class, inversedBy="photos")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $album_id;
+    private $album;
 
     /**
      * @ORM\Column(type="datetime")
@@ -37,13 +38,12 @@ class Photo
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
      */
     private $image_path;
 
     public function __construct()
     {
-        $this->date = new \DateTime();
+        $this->dt_create = new \DateTime();
     }
 
     public function getId(): ?int
@@ -51,14 +51,14 @@ class Photo
         return $this->id;
     }
 
-    public function getAlbumId(): ?Album
+    public function getAlbum(): ?Album
     {
-        return $this->album_id;
+        return $this->album;
     }
 
-    public function setAlbumId(?Album $album_id): self
+    public function setAlbum(?Album $album): self
     {
-        $this->album_id = $album_id;
+        $this->album = $album;
 
         return $this;
     }
@@ -98,4 +98,6 @@ class Photo
 
         return $this;
     }
+
+
 }

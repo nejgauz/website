@@ -47,7 +47,7 @@ class Album
     private $dt_change;
 
     /**
-     * @ORM\OneToMany(targetEntity=Photo::class, mappedBy="album_id", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Photo::class, mappedBy="album", orphanRemoval=true)
      */
     private $photos;
 
@@ -123,7 +123,7 @@ class Album
     {
         if (!$this->photos->contains($photo)) {
             $this->photos[] = $photo;
-            $photo->setAlbumId($this);
+            $photo->setAlbum($this);
         }
 
         return $this;
@@ -134,8 +134,8 @@ class Album
         if ($this->photos->contains($photo)) {
             $this->photos->removeElement($photo);
             // set the owning side to null (unless already changed)
-            if ($photo->getAlbumId() === $this) {
-                $photo->setAlbumId(null);
+            if ($photo->getAlbum() === $this) {
+                $photo->setAlbum(null);
             }
         }
 
