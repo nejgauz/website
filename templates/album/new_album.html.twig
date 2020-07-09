@@ -2,14 +2,14 @@
 
 {% block body %}
     <h1>Добавление нового альбома:</h1>
-    {{ form_start(form) }}
+    <form name="album" method="post" novalidate>
 
-    {{ form_row(form.title, {'label': 'Название альбома'}) }}
+        {{ form_row(form.title, {'label': 'Название альбома'}) }}
 
-    {{ form_row(form.email, {'label': 'Электронная почта'}) }}
+        {{ form_row(form.email, {'label': 'Электронная почта'}) }}
 
-    {{ form_row(form.save, {'attr': {'class': 'button'}}) }}
+        {{ form_row(form.save, {'attr': {'class': 'button'}}) }}
 
-    {{ form_end(form) }}
+    </form>
     <button class="button cancel"><a href="{{ url('albums_list') }}">Отмена</a></button>
 {% endblock %}

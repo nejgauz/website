@@ -43,6 +43,14 @@ form label {
     vertical-align: middle;
 }
 
+form ul {
+    list-style: none;
+    padding-left: 20px;
+    background-color: coral;
+    width: 30%;
+    border-radius: 5px;
+}
+
 input, textarea {
     display: block;
     margin: 10px;

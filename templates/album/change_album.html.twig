@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Изменение альбома "{{ album.title }}":</h1>
-    {{ form_start(form) }}
+    <h1>Изменение альбома:</h1>
+    <form name="album" method="post" novalidate>
 
-    {{ form_row(form.title, {'label': 'Название альбома'}) }}
+        {{ form_row(form.title, {'label': 'Название альбома'}) }}
 
-    {{ form_row(form.email, {'label': 'Электронная почта'}) }}
+        {{ form_row(form.email, {'label': 'Электронная почта'}) }}
 
-    {{ form_row(form.save, {'attr': {'class': 'button'}}) }}
+        {{ form_row(form.save, {'attr': {'class': 'button'}}) }}
 
-    {{ form_end(form) }}
+    </form>
     <button class="button cancel"><a href="{{ url('albums_list') }}">Отмена</a></button>
 {% endblock %}
