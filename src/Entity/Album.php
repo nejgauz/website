@@ -27,12 +27,16 @@ class Album
 
     /**
      * @ORM\Column(type="string", length=64)
+     * @Assert\Length(
+     *     min=3,
+     *     max=100,
+     *     )
      * @Assert\NotBlank
      */
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank
      * @Assert\Email(
      *     message = "'{{ value }}' - некорректный электронный адрес."

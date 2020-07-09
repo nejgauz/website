@@ -31,7 +31,7 @@ class Photo
     private $dt_create;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank
      */
     private $title;
