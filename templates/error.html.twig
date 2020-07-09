@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    <h1>Альбома с id {{id}} не существует<h1>
-    <button class="button">Вернуться к списку альбомов</button>
+    <h1>{{ message }}<h1>
+    <button class="button"><a href="{{ url('albums_list') }}">Вернуться к списку альбомов</a></button>
 
 {% endblock %}
