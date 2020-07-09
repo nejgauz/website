@@ -60,3 +60,8 @@ form {
     margin-left: 40px;
     background-color: #2392fa;
 }
+
+.image--list {
+    width: 150px;
+    border-radius: 10%;
+}

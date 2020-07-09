@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>{{ album.title }}</h1>
+    <h1>"{{ album.title }}"</h1>
     <ul>
         {% for photo in album.photos %}
             <ul class="menu">
-                <li>{{ photo.image_path }}</li>
+                <li><img src="{{ asset('assets/img/' ~ photo.imagePath) }}" class="image--list"></li>
                 <li>{{ photo.title }}</li>
-                <li>Загружено: {{ dt_create }}</li>
-                <li><a href="#">удалить фотографию</a></li>
+                <li>Загружено: {{ photo.dtCreate.format('Y-m-d H:i:s') }}</li>
+                <li><a href="{{ url('delete_photo', {'id': photo.id}) }}">удалить фотографию</a></li>
             </ul>
         {% endfor %}
     </ul>
