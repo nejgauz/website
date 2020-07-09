@@ -6,18 +6,32 @@ namespace App\Form\Type;
 
 use App\Entity\Photo;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 
 class MyPhotoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('image_path', TextType::class)
+            ->add('file', FileType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new Image([
+                        'maxWidth' => 1080,
+                        'maxHeight' => 1080,
+                        'mimeTypes' => [
+                            'image/png',
+                            'image/jpeg',
+                        ],
+                        'mimeTypesMessage' => 'Загрузите, пожалуйста, файл в формате jpg, jpeg или png',
+                    ])
+                ]
+            ])
             ->add('title', TextareaType::class, ['attr' => ['rows' => 2]])
             ->add('save', SubmitType::class, ['label' => 'Сохранить'])
         ;

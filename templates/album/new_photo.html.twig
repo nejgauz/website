@@ -4,7 +4,7 @@
     <h1>Добавление фотографии в альбом "{{ album.title }}":</h1>
     {{ form_start(form) }}
 
-    {{ form_row(form.image_path, {'label': 'Прикрепите файл'}) }}
+    {{ form_row(form.file, {'label': 'Прикрепите файл'}) }}
 
     {{ form_row(form.title, {'label': 'Название фотографии'}) }}
 

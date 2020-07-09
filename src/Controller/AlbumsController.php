@@ -10,6 +10,7 @@ use App\Entity\Photo;
 use App\Form\Type\AlbumType;
 use App\Form\Type\MyPhotoType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -135,11 +136,33 @@ class AlbumsController extends AbstractController
 
         $photo = new Photo();
         $form = $this->createForm(MyPhotoType::class, $photo);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('file')->getData();
+
+            $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = preg_replace('/[^a-zA-Z0-9]/', '', $originalFilename );
+            $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+            $directory = __DIR__ . '/../../public/assets/img';
+
+            try {
+                $imageFile->move(
+                    $directory,
+                    $newFilename
+                );
+            } catch (FileException $e) {
+                return $this->render(
+                    'error.html.twig', [
+                    'title' => 'Ошибка загрузки',
+                    'message' => 'Не удалось загрузить изображение'
+                ]);
+            }
+
+            $photo->setImagePath($newFilename);
+            $photo->setAlbum($album);
             $photo = $form->getData();
-            $photo->setAlbumId($id);
+
             $album->setDtChange(new \DateTime());
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -181,6 +204,34 @@ class AlbumsController extends AbstractController
 
     }
 
+    /**
+     * @Route("/photo/delete/{id}", name="delete_photo")
+     * @param int $id
+     * @return Response
+     */
+    public function deletePhoto(int $id)
+    {
+        $photo = $this->getDoctrine()
+            ->getRepository(Photo::class)
+            ->find($id);
+
+        if (!$photo) {
+            return $this->render(
+                'error.html.twig', [
+                'title' => 'Фотография не найдена',
+                'message' => 'Фотографии с id ' . $id . ' не существует'
+            ]);
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($photo);
+        $entityManager->flush();
+
+
+        return $this->redirectToRoute('view_album', ['id' => $photo->getAlbum()->getId()]);
+
+    }
+
 
     /**
      * @param int $id
@@ -191,7 +242,7 @@ class AlbumsController extends AbstractController
         return $this->render(
             'error.html.twig', [
             'title' => 'Альбом не найден',
-            'id' => $id
+            'message' => "Альбома с id ' . $id . ' не существует"
         ],
             new Response('', 404)
         );
