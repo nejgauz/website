@@ -29,6 +29,7 @@ a {
 }
 
 .button {
+    color: #7c38b0;
     margin-left: 20px;
     margin-top: 20px;
     padding: 10px;
@@ -42,7 +43,8 @@ form label {
     vertical-align: middle;
 }
 
-input {
+input, textarea {
+    display: block;
     margin: 10px;
     padding: 10px;
     border: 2px solid #3c0396;
