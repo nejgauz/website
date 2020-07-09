@@ -72,7 +72,7 @@ class AlbumsController extends AbstractController
             $entityManager->persist($album);
             $entityManager->flush();
 
-            return $this->redirectToRoute('view_album', ['id' => $album->getId()]);
+            return $this->redirectToRoute('albums_list');
         }
 
         return $this->render('album/new_album.html.twig', [
@@ -107,7 +107,7 @@ class AlbumsController extends AbstractController
             $entityManager->persist($album);
             $entityManager->flush();
 
-            return $this->redirectToRoute('view_album', ['id' => $album->getId()]);
+            return $this->redirectToRoute('albums_list');
         }
 
         return $this->render('album/change_album.html.twig', [
@@ -140,9 +140,11 @@ class AlbumsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $photo = $form->getData();
             $photo->setAlbumId($id);
+            $album->setDtChange(new \DateTime());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($photo);
+            $entityManager->persist($album);
             $entityManager->flush();
 
             return $this->redirectToRoute('view_album', ['id' => $id]);
@@ -156,6 +158,29 @@ class AlbumsController extends AbstractController
         ]);
 
     }
+
+    /**
+     * @Route("/album/delete/{id}", name="delete_album")
+     * @param int $id
+     * @return Response
+     */
+    public function deleteAlbum(int $id)
+    {
+        $album = $this->getDoctrine()
+            ->getRepository(Album::class)
+            ->find($id);
+
+        if (!$album) {
+            return $this->albumNotFound($id);
+        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($album);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('albums_list');
+
+    }
+
 
     /**
      * @param int $id
