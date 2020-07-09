@@ -12,5 +12,5 @@
             </ul>
         {% endfor %}
     </ul>
-    <button class="button">Добавить фото</button>
+    <button class="button"><a href="{{ url('add_photo', {'id': album.id}) }}">Добавить фото</a></button>
 {% endblock %}

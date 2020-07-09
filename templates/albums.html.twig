@@ -9,11 +9,11 @@
                 <li>количество фото: {{ album.photos|length }}</li>
                 <li>Создан: {{ album.dtCreate.format('Y-m-d') }}</li>
                 <li>{{ album.email }}</li>
-                <li><a href="#">удалить альбом</a></li>
-                <li><a href="#">изменить альбом</a></li>
-                <li><a href="#">просмотреть альбом</a></li>
+                <li><a href="{{ url('delete_album', {'id': album.id}) }}">удалить альбом</a></li>
+                <li><a href="{{ url('change_album', {'id': album.id}) }}">изменить альбом</a></li>
+                <li><a href="{{ url('view_album', {'id': album.id}) }}">просмотреть альбом</a></li>
             </ul>
         {% endfor %}
     </ul>
-    <button class="button">Создать новый альбом</button>
+    <button class="button"><a href="{{ url('create_album') }}">Создать новый альбом</a></button>
 {% endblock %}

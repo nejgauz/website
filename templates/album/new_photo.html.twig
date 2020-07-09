@@ -11,5 +11,5 @@
     {{ form_row(form.save, {'attr': {'class': 'button'}}) }}
 
     {{ form_end(form) }}
-    <button class="button cancel">Отмена</button>
+    <button class="button cancel"><a href="{{ url('albums_list') }}">Отмена</a></button>
 {% endblock %}
