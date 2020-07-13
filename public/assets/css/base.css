@@ -4,8 +4,13 @@ body {
     font-size: 14px;
     line-height: 1.4;
 }
+
 h1 {
     font-size: x-large;
+    margin-left: 20px;
+}
+
+h2 {
     margin-left: 20px;
 }
 .menu {
