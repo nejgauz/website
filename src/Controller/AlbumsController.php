@@ -12,6 +12,7 @@ use App\Form\Type\MyPhotoType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -181,12 +182,7 @@ class AlbumsController extends AbstractController
         }
 
         $errors = $this->getErrorMessages($form);
-
-        $response = new Response();
-        $response->setContent(json_encode(['errors' => $errors]));
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
+        return new JsonResponse(['errors' => $errors]);
 
     }
 

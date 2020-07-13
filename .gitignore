@@ -17,3 +17,4 @@
 
 .idea/
 /public/assets/img/*
+/node_modules/
