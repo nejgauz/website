@@ -10,6 +10,7 @@ use App\Entity\Photo;
 use App\Form\Type\AlbumType;
 use App\Form\Type\MyPhotoType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,17 +30,18 @@ class AlbumsController extends AbstractController
             ->findAll();
         return $this->render('albums.html.twig', [
             'title' => 'Список альбомов',
-            'albums' => $albums
+            'albums' => $albums,
         ]);
     }
 
     /**
      * @Route("/album/view/{id}", name="view_album")
      * @param int $id
+     * @param Request $request
      * @return Response
      */
 
-    public function viewAlbum(int $id)
+    public function viewAlbum(int $id, Request $request)
     {
         $album = $this->getDoctrine()
             ->getRepository(Album::class)
@@ -49,9 +51,15 @@ class AlbumsController extends AbstractController
             return $this->albumNotFound($id);
         }
 
+        $photo = new Photo();
+        $form = $this->createForm(MyPhotoType::class, $photo);
+
+        $form->handleRequest($request);
+
         return $this->render('album/view.html.twig', [
             'title' => 'Просмотр альбома',
-            'album' => $album
+            'album' => $album,
+            'form' => $form->createView()
         ]);
     }
 
@@ -97,6 +105,7 @@ class AlbumsController extends AbstractController
         if (!$album) {
             return $this->albumNotFound($id);
         }
+
         $form = $this->createForm(AlbumType::class, $album);
 
         $form->handleRequest($request);
@@ -141,9 +150,7 @@ class AlbumsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $imageFile = $form->get('file')->getData();
 
-            $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-            $safeFilename = preg_replace('/[^a-zA-Z0-9]/', '', $originalFilename );
-            $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+            $newFilename = uniqid().'.'.$imageFile->guessExtension();
             $directory = __DIR__ . '/../../public/assets/img';
 
             try {
@@ -169,16 +176,15 @@ class AlbumsController extends AbstractController
             $entityManager->persist($photo);
             $entityManager->persist($album);
             $entityManager->flush();
-
-            return $this->redirectToRoute('view_album', ['id' => $id]);
         }
 
-        return $this->render('album/new_photo.html.twig', [
-            'form' => $form->createView(),
-            'photo' => $photo,
-            'album' => $album,
-            'title' => 'Добавить фотографию'
-        ]);
+        $errors = $this->getErrorMessages($form);
+
+        $response = new Response();
+        $response->setContent(json_encode(['errors' => $errors]));
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
 
     }
 
@@ -247,6 +253,26 @@ class AlbumsController extends AbstractController
             new Response('', 404)
         );
 
+    }
+    /**
+     * @param FormInterface $form
+     * @return array
+     */
+    protected function getErrorMessages(FormInterface $form): array
+    {
+        $errors = [];
+
+        foreach ($form->getErrors() as $key => $error) {
+            $errors[] = $error->getMessage();
+        }
+        //рекурсивный случай
+        foreach ($form->all() as $child) {
+            if (!$child->isValid()) {
+                $errors[$child->getName()] = $this->getErrorMessages($child);
+            }
+        }
+
+        return $errors;
     }
 
 }
