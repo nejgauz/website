@@ -12,9 +12,11 @@ use App\Form\Type\MyPhotoType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AlbumsController extends AbstractController
@@ -48,7 +50,7 @@ class AlbumsController extends AbstractController
             ->find($id);
 
         if (!$album) {
-            return $this->albumNotFound($id);
+            throw new NotFoundHttpException();
         }
 
         $photo = new Photo();
@@ -103,7 +105,7 @@ class AlbumsController extends AbstractController
             ->find($id);
 
         if (!$album) {
-            return $this->albumNotFound($id);
+            throw new NotFoundHttpException();
         }
 
         $form = $this->createForm(AlbumType::class, $album);
@@ -142,7 +144,7 @@ class AlbumsController extends AbstractController
             ->find($id);
 
         if (!$album) {
-            return $this->albumNotFound($id);
+            throw new NotFoundHttpException();
         }
 
         $photo = new Photo();
@@ -161,11 +163,7 @@ class AlbumsController extends AbstractController
                     $newFilename
                 );
             } catch (FileException $e) {
-                return $this->render(
-                    'error.html.twig', [
-                    'title' => 'Ошибка загрузки',
-                    'message' => 'Не удалось загрузить изображение'
-                ]);
+                throw new NotFoundHttpException();
             }
 
             $photo->setImagePath($newFilename);
@@ -181,12 +179,7 @@ class AlbumsController extends AbstractController
         }
 
         $errors = $this->getErrorMessages($form);
-
-        $response = new Response();
-        $response->setContent(json_encode(['errors' => $errors]));
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
+        return new JsonResponse(['errors' => $errors]);
 
     }
 
@@ -202,7 +195,7 @@ class AlbumsController extends AbstractController
             ->find($id);
 
         if (!$album) {
-            return $this->albumNotFound($id);
+            throw new NotFoundHttpException();
         }
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($album);
@@ -224,11 +217,7 @@ class AlbumsController extends AbstractController
             ->find($id);
 
         if (!$photo) {
-            return $this->render(
-                'error.html.twig', [
-                'title' => 'Фотография не найдена',
-                'message' => 'Фотографии с id ' . $id . ' не существует'
-            ]);
+            throw new NotFoundHttpException();
         }
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -241,21 +230,6 @@ class AlbumsController extends AbstractController
     }
 
 
-    /**
-     * @param int $id
-     * @return Response
-     */
-    public function albumNotFound(int $id)
-    {
-        return $this->render(
-            'error.html.twig', [
-            'title' => 'Альбом не найден',
-            'message' => "Альбома с id ' . $id . ' не существует"
-        ],
-            new Response('', 404)
-        );
-
-    }
     /**
      * @param FormInterface $form
      * @return array
