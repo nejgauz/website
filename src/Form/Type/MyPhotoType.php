@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class MyPhotoType extends AbstractType
 {
@@ -21,6 +23,7 @@ class MyPhotoType extends AbstractType
             ->add('file', FileType::class, [
                 'mapped' => false,
                 'constraints' => [
+                    new NotBlank(['message' => 'Загрузите, пожалуйста, файл.']),
                     new Image([
                         'maxWidth' => 1080,
                         'maxHeight' => 1080,
@@ -28,19 +31,20 @@ class MyPhotoType extends AbstractType
                             'image/png',
                             'image/jpeg',
                         ],
-                        'mimeTypesMessage' => 'Загрузите, пожалуйста, файл в формате jpg, jpeg или png',
+                        'mimeTypesMessage' => 'Загрузите, пожалуйста, файл в формате jpg, jpeg или png.',
                     ])
                 ]
             ])
-            ->add('title', TextareaType::class, ['attr' => ['rows' => 2]])
-            ->add('save', SubmitType::class, ['label' => 'Сохранить'])
-        ;
+            ->add('title', TextareaType::class, ['attr' => ['rows' => 2],])
+            ->add('save', SubmitType::class, ['label' => 'Сохранить']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Photo::class,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token'
         ]);
     }
 

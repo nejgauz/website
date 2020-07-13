@@ -1,16 +1,52 @@
 {% extends 'base.html.twig' %}
 
+
 {% block body %}
-    <h1>"{{ album.title }}"</h1>
-    <ul>
-        {% for photo in album.photos %}
-            <ul class="menu">
-                <li><img src="{{ asset('assets/img/' ~ photo.imagePath) }}" class="image--list"></li>
-                <li>{{ photo.title }}</li>
-                <li>Загружено: {{ photo.dtCreate.format('Y-m-d H:i:s') }}</li>
-                <li><a href="{{ url('delete_photo', {'id': photo.id}) }}">удалить фотографию</a></li>
-            </ul>
-        {% endfor %}
-    </ul>
-    <button class="button"><a href="{{ url('add_photo', {'id': album.id}) }}">Добавить фото</a></button>
+    <h1>"{{ album.title|capitalize  }}"</h1>
+    <div id="app">
+        <ul>
+            {% for photo in album.photos %}
+                <ul class="menu">
+                    <li><img src="{{ asset('assets/img/' ~ photo.imagePath) }}" class="image--list"></li>
+                    <li>{{ photo.title }}</li>
+                    <li>Дата создания: {{ photo.dtCreate.format('Y-m-d') }}</li>
+                    <li><a href="{{ url('delete_photo', {'id': photo.id}) }}">удалить фотографию</a></li>
+                </ul>
+            {% endfor %}
+        </ul>
+        <button class="button" @click="showForm">Добавить фото</button>
+
+        <section class="add-photo-modal" id="add-photo-form" v-bind:style="formVision">
+            <h1>Добавление фотографии в альбом "{{ album.title }}":</h1>
+            <form name="my_photo" method="post" enctype="multipart/form-data" @submit="stopSubmit" novalidate>
+                <div>
+                    {{ form_label(form.file, 'Прикрепите файл') }}
+                    {{ form_errors(form.file) }}
+                    <ul class="errors">
+                        <li>{% verbatim %}{{ errorFile }}{% endverbatim %}</li>
+                    </ul>
+                    {{ form_widget(form.file, { 'attr': {'ref': 'file', '@change': 'handleFileUpload'}}) }}
+                </div>
+                <div>
+                    {{ form_label(form.title, 'Название фотографии') }}
+                    {{ form_errors(form.title) }}
+                    <ul class="errors">
+                        <li>{% verbatim %}{{ errorTitle }}{% endverbatim %}</li>
+                    </ul>
+                    {{ form_widget(form.title, {'attr': {'v-model': 'title'}}) }}
+                </div>
+                {{ form_label(form.save) }}
+                {{ form_widget(form.save, {'attr': {'class': 'button', '@click': 'submitFile'}}) }}
+
+                {{ form_widget(form._token, {'attr': {'ref': 'token'}}) }}
+                <input type="hidden" id="album_id" ref="albumId" value="{{ album.id }}" />
+
+                {{ form_end(form) }}
+
+            </form>
+                <button class="button cancel" @click="hideForm">Отмена</button>
+        </section>
+        <div class="overlay" v-bind:style="formVision"></div>
+    </div>
 {% endblock %}
+

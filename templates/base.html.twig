@@ -9,6 +9,10 @@
     </head>
     <body>
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+            <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+            <script src="{{ asset('assets/js/main.js') }}"></script>
+        {% endblock %}
     </body>
 </html>
