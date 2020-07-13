@@ -2,7 +2,7 @@
 
 {% block body %}
     <h1>Изменение альбома:</h1>
-    <form name="album" method="post" novalidate>
+    <form name="album" method="post" action="{{ url('change_album', {'id': id }) }}" novalidate>
 
         {{ form_row(form.title, {'label': 'Название альбома'}) }}
 

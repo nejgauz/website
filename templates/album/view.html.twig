@@ -9,7 +9,7 @@
                 <ul class="menu">
                     <li><img src="{{ asset('assets/img/' ~ photo.imagePath) }}" class="image--list"></li>
                     <li>{{ photo.title }}</li>
-                    <li>Загружено: {{ photo.dtCreate.format('Y-m-d H:i:s') }}</li>
+                    <li>Дата создания: {{ photo.dtCreate.format('Y-m-d') }}</li>
                     <li><a href="{{ url('delete_photo', {'id': photo.id}) }}">удалить фотографию</a></li>
                 </ul>
             {% endfor %}

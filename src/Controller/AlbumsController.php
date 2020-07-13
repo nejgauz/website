@@ -72,8 +72,8 @@ class AlbumsController extends AbstractController
     {
         $album = new Album();
         $form = $this->createForm(AlbumType::class, $album);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $album = $form->getData();
 
@@ -107,11 +107,13 @@ class AlbumsController extends AbstractController
         }
 
         $form = $this->createForm(AlbumType::class, $album);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $album = $form->getData();
+
             $album->setDtChange(new \DateTime());
+
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($album);
@@ -123,7 +125,7 @@ class AlbumsController extends AbstractController
         return $this->render('album/change_album.html.twig', [
             'form' => $form->createView(),
             'title' => 'Изменение альбома',
-            'album' => $album
+            'id' => $id
         ]);
     }
 

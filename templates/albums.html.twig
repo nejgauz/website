@@ -5,9 +5,9 @@
     <ul>
         {% for album in albums %}
             <ul class="menu">
-                <li>{{ album.title }}</li>
+                <li>{{ album.title|capitalize }}</li>
                 <li>количество фото: {{ album.photos|length }}</li>
-                <li>Создан: {{ album.dtCreate.format('Y-m-d') }}</li>
+                <li>Дата создания: {{ album.dtCreate.format('Y-m-d') }}</li>
                 <li>{{ album.email }}</li>
                 <li><a href="{{ url('delete_album', {'id': album.id}) }}">удалить альбом</a></li>
                 <li><a href="{{ url('change_album', {'id': album.id}) }}">изменить альбом</a></li>
