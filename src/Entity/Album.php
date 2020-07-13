@@ -26,14 +26,14 @@ class Album
     private $dt_create;
 
     /**
-     * @ORM\Column(type="string", length=64)
-     * @Assert\Length(
-     *     min=3,
-     *     max=100,
-     *     minMessage="Минимальное количество букв в названии: 3",
-     *     maxMessage="Максимальное количество букв в названии: 100",
-     *     )
+     * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank
+     * @Assert\Length(
+     *     min="3",
+     *     max="100",
+     *     minMessage="Минимальное количество символов в названии: 3",
+     *     maxMessage="Максимальное количество символов в названии: 100"
+     * )
      */
     private $title;
 
