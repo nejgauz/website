@@ -114,9 +114,6 @@ class AlbumsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $album = $form->getData();
 
-            $album->setDtChange(new \DateTime());
-
-
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($album);
             $entityManager->flush();
@@ -169,8 +166,7 @@ class AlbumsController extends AbstractController
             $photo->setImagePath($newFilename);
             $photo->setAlbum($album);
             $photo = $form->getData();
-
-            $album->setDtChange(new \DateTime());
+            
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($photo);
@@ -220,12 +216,21 @@ class AlbumsController extends AbstractController
             throw new NotFoundHttpException();
         }
 
+        $album = $this->getDoctrine()
+            ->getRepository(Album::class)
+            ->find($photo->getAlbum()->getId());
+
+        if (!$album) {
+            throw new NotFoundHttpException();
+        }
+
         $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($photo);
+        $album->removePhoto($photo);
+        $entityManager->persist($album);
         $entityManager->flush();
 
 
-        return $this->redirectToRoute('view_album', ['id' => $photo->getAlbum()->getId()]);
+        return $this->redirectToRoute('view_album', ['id' => $album->getId()]);
 
     }
 

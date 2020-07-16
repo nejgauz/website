@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=AlbumRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Album
 {
@@ -61,6 +62,14 @@ class Album
     {
         $this->dt_create = new \DateTime();
         $this->photos = new ArrayCollection();
+    }
+
+    /**
+     * @ORM\PreFlush()
+     */
+    public function saveDateOfChanges()
+    {
+        $this->dt_change = new \DateTime();
     }
 
     public function getId(): ?int
